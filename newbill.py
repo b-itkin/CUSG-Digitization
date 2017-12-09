@@ -64,7 +64,7 @@ class Bill:
 		self.rawinputStr=escape(self.rawinputStr)
 		tempArray=bytearray(self.rawinputStr,"utf-8")
 		for x in tempArray:
-			if x>31 and x<128:
+			if (x>31 and x<128) or x==10:
 				self.inputStr+=chr(x)
 		#self.inputStr=self.rawinputStr.decode("utf-8","replace")
 		#for x in self.rawinputStr:
