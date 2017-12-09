@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding='utf-8'?>
+<billStatus>
+	<bill>
+	<relatedBills/>
+	<latestAction>
+
+	</latestAction>
+	<billNumber> </billNumber>
+	<legislativeBody>CU Student Government Legislative Council</legislativeBody>
+	<billType> </billType>
+	<sessionNumber> </sessionNumber>
+	<summaries>
+		<history> </history>
+		<summary> </summary>
+	</summaries>
+	<billText>
+
+	</billText>
+	<actions>
+
+	</actions>
+	<sponsors>
+	</sponsors>
+	<introducedDate> </introducedDate>
+	</bill>
+</billStatus>
