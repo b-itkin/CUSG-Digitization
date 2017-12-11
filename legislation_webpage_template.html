@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-<h1><title>CUSG Legislation</title></h1>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<h1>(Session #) CUSG Legislation</h1>
 </head>
 <body>
 <hr>
+<div class="container">
+<div class="list-group">
 {%for line in legislation%}
-<a href="{{line}}">{{line}}</a>
+<a class="list-group-item list-group-item-action" href="{{line}}">{{line}}</a>
 {%endfor%}
+</div>
+</div>
 </body>
 </html>
