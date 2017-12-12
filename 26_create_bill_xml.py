@@ -44,8 +44,7 @@ for line in f:
 		print "error processing " + line + "\n" + str(e)
 f.close()
 template=env.get_template('legislation_webpage_template.html')
-f=open('legislation_web.html','w+').write(template.render(legislation=legislations))
-f.close()
+f=open('legislation_web.html','w+').write(template.render(legislation=legislations,session='26',legislationtype=mybill.billType))
 #print "SPONSORS"
 #print "--------"
 #print mybill.sponsors
