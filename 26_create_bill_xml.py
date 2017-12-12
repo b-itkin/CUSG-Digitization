@@ -4,10 +4,10 @@ import re
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 class TwentySixBill(newbill.Bill):
-	NEWENDBILLMATCHRE="This (Bill|Resolution) takes effect upon passage\.*"
+	NEWENDBILLMATCHRE="This (Bill|Resolution|Legislation) takes effect upon passage"
 	TOPHEADERRE="26 EXECUTIVE COUNCIL (BILL|RESOLUTION) [0-9][0-9]*"
 	INTRODUCEDDATERE="[0-9][0-2]*\/[0-9][0-9]*\/[0-9][0-9]"	
-	MONTHINTRODUCEDDATERE="(NOVEMBER|DECEMBER|JANUARY|FEBRUARY|MARCH|APRIL|MAY)\s*[0-9][0-9]*,\s*198[0-9]"
+	MONTHINTRODUCEDDATERE="(SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER|JANUARY|FEBRUARY|MARCH|APRIL|MAY|JUNE|JULY|AUGUST)\s*[0-9][0-9]*,\s*198[0-9]"
 
 	def parseBillText(self):
 		self.endbillMatch=re.search(self.NEWENDBILLMATCHRE,self.inputStr,re.I)

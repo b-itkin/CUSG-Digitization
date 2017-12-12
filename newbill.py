@@ -42,7 +42,7 @@ class Bill:
 	#####Regular Expressions Used In Document Searches #####
 	HISTORYMATCHRE="(Bill|Resolution) History"
 	SUMMARYMATCHRE="(Bill|Resolution) Summary"
-	BEGINBILLMATCHRE="WHEREAS"
+	BEGINBILLMATCHRE="WHEREAS."
 	BEGINBILLMATCHALTRE="(BE IT ENACTED|SECTION 1)"
 	ENDBILLMATCHRE="Vote Count:*\s*[0-9]+\/[0-9]+\/[0-9]+" 
 	AUTHORSMATCHRE="Author.*:.*"
