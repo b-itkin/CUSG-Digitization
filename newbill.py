@@ -154,6 +154,7 @@ class Bill:
 		try:
 			self.billHistoryString=self.inputStr[self.historyMatch.end():self.summaryMatch.start()]
 		except:
+			print "newbill.py ERROR:"+infile+":"
 			print "Woops! Probably need to rework the code pertaining to 'historyMatch' and 'summaryMatch' in the Bill class\nThe document may also be malformed\n"
 		finally:		
 			return self.billHistoryString
@@ -161,6 +162,7 @@ class Bill:
 		try:
 			self.billSummaryString=self.inputStr[self.summaryMatch.end():self.beginbillMatch.start()]
 		except:
+			print "ERROR:"+infile+":"
 			print "Woops! Probably need to rework the code pertaining to 'summaryMatch' and 'beginbillMatch' in the Bill class\nThe document may also be malformed\n"
 		finally:
 			return self.billSummaryString
