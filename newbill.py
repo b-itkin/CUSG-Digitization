@@ -31,6 +31,7 @@ class Bill:
 	rawinputstr="" #Non ASCIIFied
 	inputStr="" #ASCIIFied -- nobody got time for weird unicode errors
 	sponsorsString=""
+	infile=""
 	authorsString=""
 	billHistoryString=""
 	billSummaryString=""
@@ -64,6 +65,7 @@ class Bill:
 	SUBHEADERMATCHRE="(Legislative Council|A Resolution|A Bill)"
 	ACTIONSMATCHRE="^(\s\S)+(-)+(\s)*(PASSES|FAILS|POSTPONED|.*REFER.*|.*RATIF.*)(\s)*(-)+(\s)*(EXECUTIVE|LEGISLATIVE)(\s)*(COUNCIL)(\s\S)+$" #This needs some srs ironing out, may be better to do this crowdsourced or some type of fuzzy string matching
 	def __init__(self,infile,xmlcreated=False):
+		self.infile=infile
 		if (xmlcreated):
 			self.parseXML(infile)
 			#We trust the XML more than the filenames in this case. There should be some intermediary in between this call and validating the XML

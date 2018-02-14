@@ -3,15 +3,25 @@ import sys
 import re
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-class TwentySixBill(newbill.Bill):
-	NEWENDBILLMATCHRE="This (Bill|Resolution) takes effect upon passage\.*"
+#NOTA BENE: I'm testing a magic number as ALTENDBILLMATCHRE for edge cases in which NEWENDBILLMATCHRE will fail to detect the final clause of a piece of legislation.
+#No fancy stuff here, just putting my birthday twice at the end of a bill when legislators feel like not abiding by typical format.
+
+class TwentySevenBill(newbill.Bill):
+	NEWENDBILLMATCHRE="This (Bill|Resolution)(, being special order,)* (shall take|takes) effect (immediately )*upon passage\.*"
+	ALTENDBILLMATCHRE="0808199708081997" #We're gonna test having a magic number as a delimiter in this session in case the above doesn't catch something.
 	TOPHEADERRE="26 EXECUTIVE COUNCIL (BILL|RESOLUTION) [0-9][0-9]*"
 	INTRODUCEDDATERE="[0-9][0-2]*\/[0-9][0-9]*\/[0-9][0-9]"
-	MONTHINTRODUCEDDATERE="(APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER)\s*[0-9][0-9]*,\s*19(8|9)[0-9]"
+	MONTHINTRODUCEDDATERE="(APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER|JANUARY|FEBRUARY|MARCH)\s*[0-9][0-9]*,\s*19(8|9)[0-9]"
 
 	def parseBillText(self):
 		self.endbillMatch=re.search(self.NEWENDBILLMATCHRE,self.inputStr,re.I)
-		self.billText=self.inputStr[self.beginbillMatch.start():self.endbillMatch.end()]
+		if (self.endbillMatch is None):
+			print "WARNING: Trying to detect end of bill. Put '0808199708081997' before the actions section in " + self.infile +" if you have not already"
+			self.endbillMatch=re.search(self.ALTENDBILLMATCHRE,self.inputStr,re.I)
+		try:
+			self.billText=self.inputStr[self.beginbillMatch.start():self.endbillMatch.end()]
+		except:
+			print "ERROR:"+self.infile+":can't parseBillText"
 		#self.addActions
 	def parseIntroducedDate(self):
 		try:
@@ -20,7 +30,7 @@ class TwentySixBill(newbill.Bill):
 
 			self.introducedDate=self.inputStr[introducedDateMatch.start():introducedDateMatch.end()]
 		except:
-			print "Unable to parse Introduced Date\n"
+			print "ERROR:" +self.infile+"Unable to parse Introduced Date"
 
 f=open('txtfiles.txt','r')
 mybill=None
@@ -33,7 +43,7 @@ env=Environment(
 template=env.get_template('legislation_template.html')
 for line in f:
 	try:
-		mybill=TwentySixBill(line.strip())
+		mybill=TwentySevenBill(line.strip())
 		mybill.completeParse()
 		mybill.createXML()
 		legislation_name=line.strip('.txt\n')+'.html'
