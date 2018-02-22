@@ -15,7 +15,7 @@ from xml.sax.saxutils import escape
 
 class Sponsor:
 	name=""
-	title=""	
+	title=""
 	def __init__(self,sponsorName,sponsorTitle):
 		self.name=sponsorName
 		self.title=sponsorTitle
@@ -156,7 +156,7 @@ class Bill:
 		try:
 			self.billHistoryString=self.inputStr[self.historyMatch.end():self.summaryMatch.start()]
 		except:
-			print "newbill.py ERROR:"+infile+":"
+			print "newbill.py ERROR:"+self.infile+":"
 			print "Woops! Probably need to rework the code pertaining to 'historyMatch' and 'summaryMatch' in the Bill class\nThe document may also be malformed\n"
 		finally:		
 			return self.billHistoryString
@@ -164,7 +164,7 @@ class Bill:
 		try:
 			self.billSummaryString=self.inputStr[self.summaryMatch.end():self.beginbillMatch.start()]
 		except:
-			print "newbill.py ERROR:"+infile+":"
+			print "newbill.py ERROR:"+self.infile+":"
 			print "Woops! Probably need to rework the code pertaining to 'summaryMatch' and 'beginbillMatch' in the Bill class\nThe document may also be malformed\n"
 		finally:
 			return self.billSummaryString
@@ -173,7 +173,7 @@ class Bill:
 			self.sponsorsString=self.inputStr[self.sponsorsMatch.end():self.authorsMatch.start()]
 			self.authorsString=self.inputStr[self.authorsMatch.end():self.subheaderMatch.start()]
 		except:
-			print "newbill.py ERROR:"+infile+":"
+			print "newbill.py ERROR:"+self.infile+":"
 			print "Woops! Had some problems reading sponsors and authors. Check to make sure the document isn't malformed\n"
 		finally:
 			self.sponsors=self.sponsorsString.splitlines()
