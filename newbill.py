@@ -26,6 +26,31 @@ class Sponsor:
 		eTitle=ET.SubElement(root,"title")
 		eTitle.text=self.title
 		return root
+class Action:
+	action=""
+	vote_count="" #Using a string to account for "Acclamation"
+	action_date=""
+	passed=True
+	def __init__(self,actionType,voteCount,actionDate,successful):
+		self.action=actionType
+		self.vote_count=voteCount
+		self.action_date=actionDate
+		self.passed=successful
+	def createElement():
+		root=ET.Element("item")
+		eActionType=ET.SubElement(root,"type")
+		eDate=ET.SubElement(root,"date")
+		eVoteCount=ET.SubElement(root,"voteCount")
+		ePassed=ET.SubElement(root,"status")		
+		
+		eActionType.text=self.action
+		eDate.text=self.action_date
+		eVoteCount.text=self.vote_count
+		if (passed):
+			ePassed.text="PASSES"
+		else:
+			ePassed.text="FAILS"
+		return root
 
 class Bill:
 	rawinputstr="" #Non ASCIIFied
@@ -202,6 +227,23 @@ class Bill:
 		self.billText=eBillText.text
 		#TODO: parse sponsors, authors, and actions.	 
 	def createXML(self):
+		#Prevention of deletion of added metadata outside of newbill.py
+		existingAuthors=None
+		existingSponsors=None
+		existingActions=None
+		existingLatestAction=None
+		
+		try:
+			existingXML=ET.parse("{}_{}_{}.xml".format(self.billSession,self.billType,self.billNumber))
+			existingAuthors=existingXML.getroot().find('./bill/authors')
+			existingSponsors=existingXML.getroot().find('./bill/sponsors')
+			existingActions=existingXML.getroot().find('./bill/actions')
+			existingLatestAction=existingXML.getroot().find('./bill/latestAction')
+
+		except:
+			print "newbill.py:Creating new XML file for "+self.infile
+
+		#Add references to key elements
 		self.tree=ET.parse('base.xml')
 		root=self.tree.getroot()
 		prefix='./bill/'
@@ -213,7 +255,11 @@ class Bill:
 		eBillSummary=root.find(prefix+"summaries/summary")
 		eBillHistory=root.find(prefix+'summaries/history')
 		eBillIntroducedDate=root.find(prefix+'introducedDate')
-
+		eBillSponsors=root.find(prefix+'sponsors')
+		eBillAuthors=root.find(prefix+'authors')
+		eBillLatestAction=root.find(prefix+'latestAction')
+		eBillActions=root.find(prefix+'actions')
+		#Convert object into XML data
 		eBillIntroducedDate.text=self.introducedDate
 		eBillNum.text=str(self.billNumber)
 		eBillType.text=self.billType
@@ -221,9 +267,19 @@ class Bill:
 		eBillHistory.text=self.billHistoryString
 		eBillSummary.text=self.billSummaryString
 		eBillText.text=self.billText
+		#Prevention of deletion of added metadata outside of newbill.py
+		if (existingAuthors is None and existingSponsors is None):
+			self.addSponsorsAndAuthorsXML(root)
+		else:
+			eBillAuthors=existingAuthors
+			eBillSponsors=existingSponsors
 
-		self.addSponsorsAndAuthorsXML(root)
-		self.addActions(root)
+		if (existingActions is None and existingLatestAction is None):
+			self.addActions(root)
+		else:
+			eBillLatestAction=existingLatestAction
+			eBillActions=existingActions
+		#write to XML file
 		self.tree.write("{}_{}_{}.xml".format(self.billSession,self.billType,self.billNumber),encoding='utf-8',xml_declaration=True)
 	def addSponsorsAndAuthorsXML(self,root):
 		#TODO: titles, differentiation between sponsors and authors
