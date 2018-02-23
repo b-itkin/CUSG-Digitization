@@ -7,9 +7,9 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 #No fancy stuff here, just putting my birthday twice at the end of a bill when legislators feel like not abiding by typical format.
 
 class TwentySevenBill(newbill.Bill):
-	NEWENDBILLMATCHRE="This (Bill|Resolution|Legislation)(, being special order,)* (shall take|takes) effect (immediately )*upon passage\.*"
+	NEWENDBILLMATCHRE="This (Bill|Resolution|Legislation)(, being special order,)* (shall take|takes|will take) effect (immediately )*upon passage\.*"
 	ALTENDBILLMATCHRE="0808199708081997" #We're gonna test having a magic number as a delimiter in this session in case the above doesn't catch something.
-	TOPHEADERRE="26 EXECUTIVE COUNCIL (BILL|RESOLUTION) [0-9][0-9]*"
+	TOPHEADERRE="2[0-9] EXECUTIVE COUNCIL (BILL|RESOLUTION) [0-9][0-9]*"
 	INTRODUCEDDATERE="[0-9][0-2]*\/[0-9][0-9]*\/[0-9][0-9]"
 	MONTHINTRODUCEDDATERE="(APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER|JANUARY|FEBRUARY|MARCH)\s*[0-9][0-9]*,\s*19(8|9)[0-9]"
 

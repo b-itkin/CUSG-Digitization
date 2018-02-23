@@ -2,3 +2,55 @@ This is a collection of code that has aided in providing basic html and xml
 for CU Student Government legislation that has been OCR'd.
 
 It is provided under the MIT license. Full text can be found in LICENSE
+
+
+---
+General process used:
+First, scan documents at CUSG office and email to yourself. Then run OCR/cleanup in Acrobat X or Tesseract and your PDF editor of choice, adhering to the following conventions on finished file names:
+
+Session#_billtype_billnumber.pdf
+
+Session# is the legislative session the legislation was passed under.
+billtype is the type of legislation passed, a short summary of acceptable types is:
+	ECR for Executive Council Resolutions.
+	ECB for Executive Council Bills.
+	RCB for Representative Council Bills.
+	CCS for Council of Colleges and Schools Bills
+	CCSR for the rare Council of Colleges and Schools Resolutions
+	EB for Executive-initiated Bills introduced at Legislative/Executive Council
+	ER for Executive-initiated Resolutions introduced at Legislative/Executive Council
+
+Bill number for the number assigned by the president-pro-tempore of the body in which it was introduced.
+Nota bene: These bill numbers often contradict eachother, and it may be needed to add a short addendum or your own number for times at which record keeping is unclear.
+There are many cases in which the bill was referred to another legislative body (most often student group allocation bills of the 1990s era) -- in this case, attach a "refer"
+or "pulled" at the end of the filename so that you and anyone else is aware that the PDF is only evidence that this action has occurred.
+
+Finally, copy all files into a folder containing documents you wish to convert to XML/accessible webpages, convert the PDFs into plaintext documents (easily accomplished with pdftotext
+and pdftotxt.py on a linux machine), store filenames for all .txt files you wish to convert into a newline-separated list in txtfiles.txt (already accomplished by running pdftotxt.py),
+and then run the session driver appropriate for the legislation you are dealing with.
+
+The appropriate session drivers are listed below:
+26_create_bill_xml.py -- 26th session
+27_create_bill_xml.py -- 27th thru at least the 30th session
+newbill.py -- all modern legislation circa the 80th session onwards.
+
+You can and will get error messages when you run these scripts for the first time. More often than not, this will be because of the following reasons:
+1) The document is malformed. The easiest things to correct in these cases are looking through the affected text files to see if it strays from convention.
+2) Bad Unicode that is just plain unreadable -- I've done my best to filter out anything that isn't ASCII. You could get these errors if
+	a) you forgot to run OCR in Acrobat or Tesseract, in which case you should do so!
+	b) the OCR you used did not format the text to UTF-8.
+3) Acrobat's OCR especially does not like to deal with numbers. This will affect the date field adversely, with "1"s turning into "i"s and so forth.
+4) Legislators in the past liked to use non-uniform and stupid language at the end of their bills or resolutions that can only be accounted for in so many ways.
+	a) If this is the case, you will get a prompt from the program to put the magic number "0808199708081997" in between the end of the bill and the start of the
+	legislative actions section. You will still get the warning to do this when you run the script again afterwards, but if you do this correctly you will no longer get an error
+	in "parsing billText" indicating that you have done this successfully.
+5)Warnings associated with being unable to parse the Bill History and Bill Summary should be checked, but, especially with resolutions in the 1980s and 1990s, sometimes legislators did not
+include histories and summaries. Check to be sure, but this should not affect the parsing of the rest of the document.
+
+Successful output of the process detailed above will result in:
+	A searchable pdf of the form XX_billtype_YY.pdf
+	UTF-8 encoded text document of the form XX_billtype_YY.txt
+	XML metadata file corresponding to the above of the form XX_billtype_YY.xml
+	A screen-reader accessible HTML file using jQuery to present data from the XML file of the form XX_billtype_YY.html
+	legislation_web.html, a file with hyperlinks to all of the legislation processed in the directory.
+More information will follow soon.
