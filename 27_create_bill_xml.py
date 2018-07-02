@@ -1,27 +1,32 @@
 import newbill
 import sys
+import os
 import re
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 #NOTA BENE: I'm testing a magic number as ALTENDBILLMATCHRE for edge cases in which NEWENDBILLMATCHRE will fail to detect the final clause of a piece of legislation.
 #No fancy stuff here, just putting my birthday twice at the end of a bill when legislators feel like not abiding by typical format.
 
+errorsdict={}
+
 class TwentySevenBill(newbill.Bill):
 	NEWENDBILLMATCHRE="This (Bill|Resolution|Legislation)(, being special order,)* (shall take|takes|will take) effect (immediately )*upon passage\.*"
 	ALTENDBILLMATCHRE="0808199708081997" #We're gonna test having a magic number as a delimiter in this session in case the above doesn't catch something.
-	TOPHEADERRE="2[0-9] EXECUTIVE COUNCIL (BILL|RESOLUTION) [0-9][0-9]*"
+	TOPHEADERRE="(2|3)[0-9] EXECUTIVE COUNCIL (BILL|RESOLUTION) [0-9][0-9]*"
 	INTRODUCEDDATERE="[0-9][0-2]*\/[0-9][0-9]*\/[0-9][0-9]"
 	MONTHINTRODUCEDDATERE="(APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER|JANUARY|FEBRUARY|MARCH)\s*[0-9][0-9]*,\s*19(8|9)[0-9]"
-
+	error=[]
 	def parseBillText(self):
 		self.endbillMatch=re.search(self.NEWENDBILLMATCHRE,self.inputStr,re.I)
 		if (self.endbillMatch is None):
 			print "WARNING: Trying to detect end of bill. Put '0808199708081997' before the actions section in " + self.infile +" if you have not already"
+			self.error.append("Magic Number Warning")
 			self.endbillMatch=re.search(self.ALTENDBILLMATCHRE,self.inputStr,re.I)
 		try:
 			self.billText=self.inputStr[self.beginbillMatch.start():self.endbillMatch.end()]
 		except:
 			print "ERROR:"+self.infile+":can't parseBillText"
+			self.error.append("can't parseBilltext")
 		#self.addActions
 	def parseIntroducedDate(self):
 		try:
@@ -31,10 +36,13 @@ class TwentySevenBill(newbill.Bill):
 			self.introducedDate=self.inputStr[introducedDateMatch.start():introducedDateMatch.end()]
 		except:
 			print "ERROR:" +self.infile+"Unable to parse Introduced Date"
-
+			self.error.append("No Introduced Date")
+	def additionalProcessing(self):
+		errorsdict[self.infile]=self.error
 f=open('txtfiles.txt','r')
 mybill=None
 legislations=[]
+failed_legislations=[]
 legislation_name=""
 env=Environment(
 	loader=FileSystemLoader('./'),
@@ -49,13 +57,21 @@ for line in f:
 		legislation_name=line.strip('.txt\n')+'.html'
 		with open(legislation_name,'w') as hf:
 			hf.write(template.render(billNum=line.strip('.txt\n')))
-		legislations.append(legislation_name)
+		legislations.append(legislation_name.strip('\n'))
 	except Exception as e:
 		print "error processing " + line + "\n" + str(e)
+		failed_legislations.append(line.strip())
 f.close()
 template=env.get_template('legislation_webpage_template.html')
 f=open('legislation_web.html','w+').write(template.render(legislation=legislations))
-f.close()
+for fail in errorsdict:
+	print "Control-C to quit, s to skip,  otherwise press any key to correct" + fail
+	print "Errors are as follows: " +str(errorsdict[fail])
+	a=raw_input()
+	if str(a) == 's':
+		os.system("nano "+fail)
+
+
 #print "SPONSORS"
 #print "--------"
 #print mybill.sponsors

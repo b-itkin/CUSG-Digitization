@@ -3,11 +3,10 @@
 import os
 import sys
 
-os.system("ls *.pdf > pdffiles.txt")
-f=open("pdffiles.txt",'r')
+f=open("31pdfs.txt",'r')
 for line in f:
 	os.system("pdftotext "+line)
 
 f.close()
 
-os.system("ls *.txt > txtfiles.txt")
+os.system("ls *.txt > 31txtfiles.txt")

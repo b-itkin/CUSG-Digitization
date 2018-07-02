@@ -6,13 +6,13 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<span style="text-align: center;"><h1>{{session}}th Session Legislation -- {{legislationtype}}</h1></span>
+<span style="text-align: center;"><h1>{{session}} Session Legislation -- {{legislationtype}}</h1></span>
 </head>
 <body>
 <hr>
 <div class="container">
 <div class="list-group">
-{%for line in legislation%}
+{%for line in legislation.sort()%}
 <a class="list-group-item list-group-item-action" href="{{line}}">{{line}}</a>
 {%endfor%}
 </div>
