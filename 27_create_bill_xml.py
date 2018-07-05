@@ -20,13 +20,15 @@ class TwentySevenBill(newbill.Bill):
 		self.endbillMatch=re.search(self.NEWENDBILLMATCHRE,self.inputStr,re.I)
 		if (self.endbillMatch is None):
 			print "WARNING: Trying to detect end of bill. Put '0808199708081997' before the actions section in " + self.infile +" if you have not already"
-			self.error.append("Magic Number Warning")
+			self.error.append("Magic Number Warning") #warnings aren't necessary to process unless there's an error
 			self.endbillMatch=re.search(self.ALTENDBILLMATCHRE,self.inputStr,re.I)
 		try:
 			self.billText=self.inputStr[self.beginbillMatch.start():self.endbillMatch.end()]
 		except:
-			print "ERROR:"+self.infile+":can't parseBillText"
-			self.error.append("can't parseBilltext")
+			if (self.billText==""):
+				print "ERROR:"+self.infile+":can't parseBillText"
+				self.error.append("can't parseBilltext")
+				errorsdict[self.infile]=self.error
 		#self.addActions
 	def parseIntroducedDate(self):
 		try:
@@ -37,8 +39,9 @@ class TwentySevenBill(newbill.Bill):
 		except:
 			print "ERROR:" +self.infile+"Unable to parse Introduced Date"
 			self.error.append("No Introduced Date")
-	def additionalProcessing(self):
-		errorsdict[self.infile]=self.error
+			errorsdict[self.infile]=self.error
+#	def additionalProcessing(self):
+#		errorsdict[self.infile]=self.error
 f=open('txtfiles.txt','r')
 mybill=None
 legislations=[]
@@ -64,11 +67,12 @@ for line in f:
 f.close()
 template=env.get_template('legislation_webpage_template.html')
 f=open('legislation_web.html','w+').write(template.render(legislation=legislations))
+print errorsdict
 for fail in errorsdict:
 	print "Control-C to quit, s to skip,  otherwise press any key to correct" + fail
 	print "Errors are as follows: " +str(errorsdict[fail])
 	a=raw_input()
-	if str(a) == 's':
+	if str(a) != 's':
 		os.system("nano "+fail)
 
 
