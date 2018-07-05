@@ -57,6 +57,7 @@ class Bill:
 	inputStr="" #ASCIIFied -- nobody got time for weird unicode errors
 	sponsorsString=""
 	infile=""
+	canonName=""
 	authorsString=""
 	billHistoryString=""
 	billSummaryString=""
@@ -98,7 +99,7 @@ class Bill:
 		else:		
 			with io.open(infile,'r',encoding='utf-8') as f:
 				self.rawinputStr=f.read()
-			self.tempBillString=os.path.splitext(infile)[0]
+			self.canonName=self.tempBillString=os.path.splitext(infile)[0]
 			billNameInfo=self.tempBillString.split('_')
 			self.billSession=int(billNameInfo[0])
 			self.billType=billNameInfo[1]
@@ -130,7 +131,6 @@ class Bill:
 		self.authorsMatch=re.search(self.AUTHORSMATCHRE,self.inputStr) #bad type of lazy -- considering getting rid of this in newbill and shifting to session drivers.
 		self.sponsorsMatch=re.search(self.SPONSORSMATCHRE,self.inputStr) #bad type of lazy -- considering getting rid of this in newbill and shifting to session drivers.
 		self.subheaderMatch=re.search(self.SUBHEADERMATCHRE,self.inputStr,flags=re.I) #lazy?
-		
 		
 		
 
@@ -209,6 +209,7 @@ class Bill:
 		self.tree=ET.parse(infile)
 		root=self.tree.getroot()
 		prefix="./bill/"
+		eBillCanonName=root.find(prefix+'canonicalname')
 		eBillNum=root.find(prefix+'billNumber')
 		eBillType=root.find(prefix+'billType')
 		eBillSess=root.find(prefix+'sessionNumber')
@@ -225,6 +226,7 @@ class Bill:
 		self.billHistoryString=eBillHistory.text
 		self.billSummaryString=eBillSummary.text
 		self.billText=eBillText.text
+		self.canonName=eBillCanonName.text
 		#TODO: parse sponsors, authors, and actions.	 
 	def createXML(self):
 		#Prevention of deletion of added metadata outside of newbill.py
@@ -247,6 +249,7 @@ class Bill:
 		self.tree=ET.parse('base.xml')
 		root=self.tree.getroot()
 		prefix='./bill/'
+		eBillCanonName=root.find(prefix+"canonicalname")
 		eBillNum=root.find(prefix+'billNumber')
 		eBillType=root.find(prefix+'billType')
 		eBillSess=root.find(prefix+'sessionNumber')
@@ -267,6 +270,7 @@ class Bill:
 		eBillHistory.text=self.billHistoryString
 		eBillSummary.text=self.billSummaryString
 		eBillText.text=self.billText
+		eBillCanonName.text=self.canonName
 		#Prevention of deletion of added metadata outside of newbill.py
 		if (existingAuthors is None and existingSponsors is None):
 			self.addSponsorsAndAuthorsXML(root)
