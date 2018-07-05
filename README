@@ -31,7 +31,7 @@ and then run the session driver appropriate for the legislation you are dealing 
 
 The appropriate session drivers are listed below:
 26_create_bill_xml.py -- 26th session
-27_create_bill_xml.py -- 27th thru at least the 30th session
+27_create_bill_xml.py -- 27th thru at least the 34th session
 newbill.py -- all modern legislation circa the 80th session onwards.
 
 You can and will get error messages when you run these scripts for the first time. More often than not, this will be because of the following reasons:
