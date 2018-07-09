@@ -285,6 +285,14 @@ class Bill:
 			eBillActions=existingActions
 		#write to XML file
 		self.tree.write("{}_{}_{}.xml".format(self.billSession,self.billType,self.billNumber),encoding='utf-8',xml_declaration=True)
+		#There is no easier way in element tree to do this unfortunately
+		file=open("{}_{}_{}.xml".format(self.billSession,self.billType,self.billNumber),"r")
+		lines=file.readlines()
+		file.close()
+		lines.insert(1,'<?xml-stylesheet type="text/xsl" href="bill.xsl"?>')
+		file=open("{}_{}_{}.xml".format(self.billSession,self.billType,self.billNumber),"w")
+		file.write("".join(lines))
+		file.close()
 	def addSponsorsAndAuthorsXML(self,root):
 		#TODO: titles, differentiation between sponsors and authors
 		#eBillSponsors=root.find('./bill/sponsors')

@@ -54,6 +54,7 @@ legislation_name=""
 #template=env.get_template('legislation_template.html')
 for line in f:
 	try:
+		legislation_name=line.strip()
 		mybill=TwentySevenBill(line.strip())
 		mybill.completeParse()
 		mybill.createXML()
@@ -68,7 +69,7 @@ f.close()
 #template=env.get_template('legislation_webpage_template.html')
 #f=open('legislation_web.html','w+').write(template.render(legislation=legislations))
 print errorsdict
-print "\nSuccessful legislation:"+legislations
+print "\nSuccessful legislation:"+str(legislations)
 print "Entering legislation correction mode"
 for fail in errorsdict:
 	print "Control-C to quit, s to skip,  otherwise press any key to correct" + fail
