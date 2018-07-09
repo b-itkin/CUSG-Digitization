@@ -2,7 +2,7 @@ import newbill
 import sys
 import os
 import re
-from jinja2 import Environment, FileSystemLoader, select_autoescape
+#from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 #NOTA BENE: I'm testing a magic number as ALTENDBILLMATCHRE for edge cases in which NEWENDBILLMATCHRE will fail to detect the final clause of a piece of legislation.
 #No fancy stuff here, just putting my birthday twice at the end of a bill when legislators feel like not abiding by typical format.
@@ -47,27 +47,29 @@ mybill=None
 legislations=[]
 failed_legislations=[]
 legislation_name=""
-env=Environment(
-	loader=FileSystemLoader('./'),
-	autoescape=select_autoescape(['html','xml'])
-)
-template=env.get_template('legislation_template.html')
+#env=Environment(
+#	loader=FileSystemLoader('./'),
+#	autoescape=select_autoescape(['html','xml'])
+#)
+#template=env.get_template('legislation_template.html')
 for line in f:
 	try:
 		mybill=TwentySevenBill(line.strip())
 		mybill.completeParse()
 		mybill.createXML()
-		legislation_name=line.strip('.txt\n')+'.html'
-		with open(legislation_name,'w') as hf:
-			hf.write(template.render(billNum=line.strip('.txt\n')))
+		#legislation_name=line.strip('.txt\n')+'.html'
+		#with open(legislation_name,'w') as hf:
+		#	hf.write(template.render(billNum=line.strip('.txt\n')))
 		legislations.append(legislation_name.strip('\n'))
 	except Exception as e:
 		print "error processing " + line + "\n" + str(e)
 		failed_legislations.append(line.strip())
 f.close()
-template=env.get_template('legislation_webpage_template.html')
-f=open('legislation_web.html','w+').write(template.render(legislation=legislations))
+#template=env.get_template('legislation_webpage_template.html')
+#f=open('legislation_web.html','w+').write(template.render(legislation=legislations))
 print errorsdict
+print "\nSuccessful legislation:"+legislations
+print "Entering legislation correction mode"
 for fail in errorsdict:
 	print "Control-C to quit, s to skip,  otherwise press any key to correct" + fail
 	print "Errors are as follows: " +str(errorsdict[fail])
