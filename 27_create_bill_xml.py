@@ -10,7 +10,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 errorsdict={}
 
 class TwentySevenBill(newbill.Bill):
-	NEWENDBILLMATCHRE="This (Bill|Resolution|Legislation)(, being special order,)* (shall take|takes|will take) effect (immediately )*upon passage\.*"
+	NEWENDBILLMATCHRE="This (Bill|Resolution|Legislation)(, being special order,)* (shall become|shall take|takes|will take) effect(ive)* (immediately )*upon passage\.*"
 	ALTENDBILLMATCHRE="0808199708081997" #We're gonna test having a magic number as a delimiter in this session in case the above doesn't catch something.
 	TOPHEADERRE="(2|3)[0-9] EXECUTIVE COUNCIL (BILL|RESOLUTION) [0-9][0-9]*"
 	INTRODUCEDDATERE="[0-9][0-2]*\/[0-9][0-9]*\/[0-9][0-9]"
