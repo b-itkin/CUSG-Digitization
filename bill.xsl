@@ -42,6 +42,13 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <p><h2>Misc. Bill Info</h2></p>
 <p> Introduced Date: <span text-align="right" class="introduceddate"> <xsl:value-of select="billStatus/bill/introducedDate"/></span></p>
 <p>Legislation number: <xsl:value-of select="billStatus/bill/canonicalname"/></p>
+<p><a>
+<xsl:attribute name="href">
+<xsl:value-of select="billStatus/bill/canonicalname"></xsl:value-of>
+<xsl:text>.pdf</xsl:text>
+</xsl:attribute>
+PDF link
+</a></p>
 <br></br>
 <h3>Sponsors and Authors</h3>
 <div class="sponsors"></div>
