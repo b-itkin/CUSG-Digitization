@@ -10,9 +10,9 @@ import re
 errorsdict={}
 
 class TwentySevenBill(newbill.Bill):
-	NEWENDBILLMATCHRE="This (Bill|Resolution|Legislation)(, being special order,)* (shall become|shall take|takes|will take) effect(ive)* (immediately )*upon passage\.*"
+	NEWENDBILLMATCHRE="This (Bill|Resolution|Legislation)(, being special order,)* (shall become|shall take|takes|will take|shall go into) effect(ive)* (immediately )*(up)*on passage( by executive council)*\.*"
 	ALTENDBILLMATCHRE="0808199708081997" #We're gonna test having a magic number as a delimiter in this session in case the above doesn't catch something.
-	TOPHEADERRE="(2|3)[0-9] EXECUTIVE COUNCIL (BILL|RESOLUTION) [0-9][0-9]*"
+	TOPHEADERRE="(2|3|4)[0-9] (EXECUTIVE|LEGISLATIVE) COUNCIL (BILL|RESOLUTION) [0-9][0-9]*"
 	INTRODUCEDDATERE="[0-9][0-2]*\/[0-9][0-9]*\/[0-9][0-9]"
 	MONTHINTRODUCEDDATERE="(APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER|JANUARY|FEBRUARY|MARCH)\s*[0-9][0-9]*,\s*19(8|9)[0-9]"
 	error=[]
