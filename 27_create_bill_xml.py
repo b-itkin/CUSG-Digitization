@@ -15,7 +15,6 @@ class TwentySevenBill(newbill.Bill):
 	TOPHEADERRE="(2|3|4)[0-9] (EXECUTIVE|LEGISLATIVE) COUNCIL (BILL|RESOLUTION) [0-9][0-9]*"
 	INTRODUCEDDATERE="[0-9][0-2]*\/[0-9][0-9]*\/[0-9][0-9]"
 	MONTHINTRODUCEDDATERE="(APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER|JANUARY|FEBRUARY|MARCH)\s*[0-9][0-9]*,\s*19(8|9)[0-9]"
-	error=[]
 	def parseBillText(self):
 		self.endbillMatch=re.search(self.NEWENDBILLMATCHRE,self.inputStr,re.I)
 		if (self.endbillMatch is None):
